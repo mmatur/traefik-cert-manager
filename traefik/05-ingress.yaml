@@ -1,0 +1,17 @@
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: dashboard
+  namespace: traefik
+spec:
+  entryPoints:
+    - http
+  routes:
+    - match: Host(`dashboard.cert.containous.cloud`)
+      kind: Rule
+      services:
+        - name: traefik-dashboard
+          port: 8080
+
+

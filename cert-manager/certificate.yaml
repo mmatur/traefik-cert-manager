@@ -1,0 +1,29 @@
+---
+apiVersion: cert-manager.io/v1alpha2
+kind: Certificate
+metadata:
+  name: whoami-cert
+  namespace: whoami
+spec:
+  commonName: whoami.cert.containous.cloud
+  secretName: whoami-cert
+  dnsNames:
+    - whoami.cert.containous.cloud
+  issuerRef:
+    name: letsencrypt-staging
+    kind: ClusterIssuer
+
+---
+apiVersion: cert-manager.io/v1alpha2
+kind: Certificate
+metadata:
+  name: powpow-cert
+  namespace: whoami
+spec:
+  commonName: powpow.cert.containous.cloud
+  secretName: powpow-cert
+  dnsNames:
+    - powpow.cert.containous.cloud
+  issuerRef:
+    name: letsencrypt-staging
+    kind: ClusterIssuer

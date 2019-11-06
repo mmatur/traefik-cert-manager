@@ -1,0 +1,37 @@
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: whoami
+  namespace: whoami
+spec:
+  entryPoints:
+    - http
+    - https
+  routes:
+    - match: Host(`whoami.cert.containous.cloud`)
+      kind: Rule
+      services:
+        - name: whoami
+          port: 80
+  tls:
+    secretName: whoami-cert
+
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: powpow
+  namespace: whoami
+spec:
+  entryPoints:
+    - http
+    - https
+  routes:
+    - match: Host(`powpow.cert.containous.cloud`)
+      kind: Rule
+      services:
+        - name: whoami
+          port: 80
+  tls:
+    secretName: powpow-cert
