@@ -18,7 +18,9 @@ data:
         address = ":443"
     [providers]
       [providers.kubernetesCRD]
+      # Enable kubernetes ingress provider to expose cert-manager challenge
       [providers.kubernetesIngress]
+        ingressClass = "traefik-cert-manager"
     [api]
       dashboard = true
       insecure = true

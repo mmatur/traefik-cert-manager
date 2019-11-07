@@ -75,7 +75,7 @@ helm install \
 kubectl get pods --namespace cert-manager
 ```
 
-- Create cluster issuer + certificate
+- Create cluster issuer + certificate for `whoami.cert.containous.cloud`and `powpow.cert.containous.cloud`
 
 ```
 kubectl apply -f cert-manager/
@@ -85,6 +85,7 @@ kubectl apply -f cert-manager/
 
 ```
 kubectl describe certificate -n whoami whoami-cert
+kubectl describe certificate -n whoami powpow-cert
 ```
 
 - Check the certificate issuer with the command:
