@@ -23,7 +23,6 @@ data:
         ingressClass = "traefik-cert-manager"
     [api]
       dashboard = true
-      insecure = true
     [ping]
     [metrics]
       [metrics.prometheus]

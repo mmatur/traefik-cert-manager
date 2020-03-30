@@ -22,7 +22,7 @@ spec:
       serviceAccountName: traefik-ingress-controller
       containers:
         - name: traefik
-          image: mmatur/traefik:powpow
+          image: traefik:v2.2
           imagePullPolicy: Always
           ports:
             - name: http
