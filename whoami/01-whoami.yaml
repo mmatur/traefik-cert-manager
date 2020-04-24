@@ -1,19 +1,22 @@
 kind: Deployment
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 metadata:
   name: whoami
   namespace: whoami
 spec:
   replicas: 2
+  selector:
+    matchLabels:
+      app: whoami
   template:
     metadata:
       labels:
         app: whoami
     spec:
       containers:
-      - name: whoami
-        image: containous/whoami
-        imagePullPolicy: Always
+        - name: whoami
+          image: containous/whoami
+          imagePullPolicy: Always
 
 ---
 apiVersion: v1
@@ -26,7 +29,7 @@ metadata:
 spec:
   type: ClusterIP
   ports:
-  - port: 80
-    name: whoami
+    - port: 80
+      name: whoami
   selector:
     app: whoami

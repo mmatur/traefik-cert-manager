@@ -6,8 +6,7 @@ metadata:
   namespace: whoami
 spec:
   entryPoints:
-    - http
-    - https
+    - websecure
   routes:
     - match: Host(`whoami.cert.containous.cloud`)
       kind: Rule
@@ -25,8 +24,7 @@ metadata:
   namespace: whoami
 spec:
   entryPoints:
-    - http
-    - https
+    - websecure
   routes:
     - match: Host(`powpow.cert.containous.cloud`)
       kind: Rule

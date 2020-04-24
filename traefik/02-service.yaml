@@ -13,23 +13,5 @@ spec:
     - protocol: TCP
       name: https
       port: 443
-    - protocol: TCP
-      name: tcp
-      port: 8081
-  selector:
-    app: traefik
-
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: traefik-dashboard
-  namespace: traefik
-spec:
-  type: ClusterIP
-  ports:
-    - protocol: TCP
-      name: admin
-      port: 8080
   selector:
     app: traefik

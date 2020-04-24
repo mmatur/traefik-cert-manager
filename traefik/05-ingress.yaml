@@ -6,7 +6,7 @@ metadata:
   namespace: traefik
 spec:
   entryPoints:
-    - http
+    - web
   routes:
     - match: Host(`dashboard.cert.containous.cloud`)
       kind: Rule

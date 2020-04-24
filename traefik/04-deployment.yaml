@@ -16,14 +16,26 @@ spec:
       labels:
         app: traefik
       annotations:
-        prometheus.io/scrape: 'true'
-        prometheus.io/port: '8080'
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8080"
     spec:
       serviceAccountName: traefik-ingress-controller
       containers:
         - name: traefik
           image: traefik:v2.2
           imagePullPolicy: Always
+          args:
+            - "--global.checkNewVersion=false"
+            - "--global.sendAnonymousUsage=false"
+            - "--log.level=DEBUG"
+            - "--entryPoints.web.address=:80"
+            - "--entryPoints.websecure.address=:443"
+            - "--entrypoints.websecure.http.tls"
+            - "--providers.kubernetesCRD"
+            - "--providers.kubernetesIngress.ingressClass=traefik-cert-manager"
+            - "--api.dashboard"
+            - "--ping"
+            - "--metrics.prometheus"
           ports:
             - name: http
               containerPort: 80
@@ -31,10 +43,3 @@ spec:
               containerPort: 443
             - name: admin
               containerPort: 8080
-          volumeMounts:
-            - name: config-volume
-              mountPath: /etc/traefik
-      volumes:
-        - name: config-volume
-          configMap:
-            name: traefik-config
