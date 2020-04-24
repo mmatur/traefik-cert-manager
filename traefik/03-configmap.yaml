@@ -16,6 +16,7 @@ data:
         address = ":80"
       [entryPoints.https]
         address = ":443"
+        [entryPoints.https.http.tls]
     [providers]
       [providers.kubernetesCRD]
       # Enable kubernetes ingress provider to expose cert-manager challenge
