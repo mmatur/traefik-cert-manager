@@ -1,6 +1,7 @@
 # Traefik v2 + cert-manager
 
 ## Install the kubernetes cluster in GCP US region
+
 ```bash
 export CLUSTER_NAME="cluster-traefik-v2"
 
@@ -12,8 +13,20 @@ gcloud container clusters create "${CLUSTER_NAME}" \
 ## Install traefik v2
 
 ```
-kubectl apply -f traefik/
+helm repo add traefik https://containous.github.io/traefik-helm-chart
+helm repo update
+
+kubectl create namespace traefik
+helm install --namespace traefik traefik traefik/traefik --values traefik/values.yaml
 ```
+
+## Access to the dashboard
+
+```
+kubectl port-forward -n traefik $(kubectl get pods -n traefik --selector "app.kubernetes.io/name=traefik" --output=name) 9000:9000
+```
+
+http://127.0.0.1:9000/dashboard/
 
 ## Install whoami
 
@@ -30,31 +43,6 @@ kubectl apply --validate=false -f https://raw.githubusercontent.com/jetstack/cer
 # Create the namespace for cert-manager
 kubectl create namespace cert-manager
 
-## For GKE user only
-kubectl create clusterrolebinding cluster-admin-binding \
-  --clusterrole=cluster-admin \
-  --user=$(gcloud config get-value core/account)
-
-echo 'apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: tiller
-  namespace: kube-system
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRoleBinding
-metadata:
-  name: tiller
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
-  name: cluster-admin
-subjects:
-  - kind: ServiceAccount
-    name: tiller
-    namespace: kube-system'| kubectl apply -f -
-helm init --service-account tiller --upgrade
-
 # Add the Jetstack Helm repository
 helm repo add jetstack https://charts.jetstack.io
 
@@ -63,10 +51,9 @@ helm repo update
 
 # Install the cert-manager Helm chart
 helm install \
-  --name cert-manager \
+  cert-manager jetstack/cert-manager \
   --namespace cert-manager \
-  --version v0.11.0 \
-  jetstack/cert-manager
+  --version v0.14.2
 ```
 
 - Verifying the installation
@@ -92,4 +79,15 @@ kubectl describe certificate -n whoami powpow-cert
 
 ```
 echo | openssl s_client -showcerts -servername whoami.cert.containous.cloud -connect whoami.cert.containous.cloud:443 2>/dev/null | openssl x509 -inform pem -text | grep 'Issuer'
+```
+
+
+## Cleanup
+
+``````bash
+export CLUSTER_NAME="cluster-traefik-v2"
+
+gcloud container clusters delete "${CLUSTER_NAME}" \
+  --zone="us-west1-a" \
+  --project="${GCLOUD_PROJECT}"
 ```
